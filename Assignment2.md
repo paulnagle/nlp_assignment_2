@@ -1,13 +1,15 @@
 MSc in Artificial Intelligence Natural Language Processing Module
->
-> **ASSIGNMENT** **2**
->
-> **Low-Resource** **Speech-to-Text** **Translation:** **Building**
-> **an** **Irish→English** **Cascaded** **Pipeline**
+
+REF: https://aclanthology.org/2024.iwslt-1.19/
+
+# ASSIGNMENT 2
+
+**Low-Resource** **Speech-to-Text** **Translation:** **Building**
+**an** **Irish→English** **Cascaded** **Pipeline**
 
 Module Weighting: 50% of total module mark 
 
-Submission Deadline: 10th May 2026, 23:59
+Submission Deadline: 10th May 2026, 23:59. (late penalty waived until the 12th)
 
 Format: ACL-style conference paper + code submission Dataset: IWSLT 2026
 
@@ -20,7 +22,7 @@ Irish–English Speech Translation Data Mode: Individual submission
 
 NLP Module — Assignment 2: Irish→English Speech Translation
 
-**1.** **Overview**
+## **1.** **Overview**
 
 This assignment forms the second and major piece of assessed coursework
 for the Natural Language Processing module. It is worth 50% of your
@@ -35,9 +37,9 @@ components, integrate them into a coherent pipeline, rigorously
 evaluatetheresults, and writeup your findings in thestyleofan academic
 conferencepaper using the ACL template.
 
-**2.** **Background** **and** **Motivation**
+## **2.** **Background** **and** **Motivation**
 
-**2.1** **Low-Resource** **Speech** **Translation**
+### **2.1** **Low-Resource** **Speech** **Translation**
 
 Speech translation (ST) — the task of converting spoken audio in one
 language into text in another — is challenging even for well-resourced
@@ -54,7 +56,7 @@ than competing in the full shared task, you will engage with the same
 data and evaluation framework but within the scope of an MSc research
 exercise.
 
-**2.2** **Why** **Cascaded** **ASR→MT?**
+### **2.2** **Why** **Cascaded** **ASR→MT?**
 
 There are two broad architectural strategies for speech translation:
 end-to-end systems (which jointly model speech and translation) and
@@ -73,7 +75,7 @@ have several practical advantages in low-resource settings:
 This assignment focuses on the cascaded approach, requiring you to make
 principled decisions about each component.
 
-**3.** **Learning** **Outcomes**
+## **3.** **Learning** **Outcomes**
 
 On successful completion of this assignment, you will be able to:
 
@@ -109,11 +111,11 @@ NLP Module — Assignment 2: Irish→English Speech Translation
 > • Communicate technical decisions and experimental findings clearly
 > and critically.
 
-**4.** **Assignment** **Task**
+## **4.** **Assignment** **Task**
 
 You must complete all of the following components:
 
-**4.1** **Data** **Preparation**
+### **4.1** **Data** **Preparation**
 
 > • Clone and explore the IWSLT 2026 Irish–English dataset from GitHub
 > [(<u>https://github.com/acl-org/acl-style-files)</u>](https://github.com/acl-org/acl-style-files)
@@ -125,7 +127,7 @@ You must complete all of the following components:
 > • Document dataset statistics: number of utterances, total duration,
 > split sizes.
 
-**4.2** **Baseline** **Cascaded** **Pipeline**
+### **4.2** **Baseline** **Cascaded** **Pipeline**
 
 > • Select a pretrained ASR model suitable for Irish speech (e.g. a
 > Whisper variant).
@@ -136,7 +138,7 @@ You must complete all of the following components:
 >
 > • Run inference on the test or development set and save outputs.
 
-**4.3** **Improved** **System**
+### **4.3** **Improved** **System**
 
 > • Design and implement at least one meaningful improvement over the
 > baseline.
@@ -147,14 +149,14 @@ You must complete all of the following components:
 >
 > • Clearly document what you changed and why.
 
-**4.4** **Evaluation**
+### **4.4** **Evaluation**
 
 > • Compute BLEU and chrF++ scores for both systems. • Report results in
 > a clearly formatted table.
 >
 > • Optionally compute COMET scores if compute budget allows.
 
-**4.5** **Error** **Analysis**
+### **4.5** **Error** **Analysis**
 
 > • Analyse at least 20 system outputs qualitatively.
 >
@@ -163,13 +165,13 @@ You must complete all of the following components:
 >
 > • Discuss which errors are most common and their likely causes.
 
-**5.** **Technical** **Requirements**
+## **5.** **Technical** **Requirements**
 
 Deadline: 10 May 2026 \| Page 3
 
 NLP Module — Assignment 2: Irish→English Speech Translation
 
-**5.1** **Permitted** **Models** **and** **Tools**
+### **5.1** **Permitted** **Models** **and** **Tools**
 
 You are encouraged to use any of the following pretrained model
 families, but you are not limited to them:
@@ -185,7 +187,7 @@ families, but you are not limited to them:
 You must document every external model used, including its Hugging Face
 model ID or source URL, licence, and the reason for choosing it.
 
-**5.2** **Compute** **Constraints**
+### **5.2** **Compute** **Constraints**
 
 All experiments can be runnable on Google Colab (free tier or Colab Pro)
 or a standard laptop with a GPU (or CPU with patience). You will not
@@ -201,29 +203,18 @@ require access to multi-GPU clusters. Specifically:
 > your report and ensure your code can produce representative results
 > within Colab free-tier constraints on a subset.
 
-**6.** **Deliverables**
+### **6.** **Deliverables**
 
 You must submit all of the following via the module submission portal:
 
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
 
 Your code must be reproducible. Include all random seeds and version
 information. A marker should be able to clone your notebook and
 reproduce your headline results.
 
-**7.** **Report** **Guidelines**
+## **7.** **Report** **Guidelines**
 
-**7.1** **Format**
+### **7.1** **Format**
 
 Your report must use the ACL 2025 LaTeX or Word template. The template
 is available at:
@@ -237,7 +228,7 @@ Deadline: 10 May 2026 \| Page 4
 
 NLP Module — Assignment 2: Irish→English Speech Translation
 
-**7.2** **Recommended** **Structure**
+### **7.2** **Recommended** **Structure**
 
 > • **Abstract** **(150–200** **words):** **What** **you** **did,**
 > **how,** **and** **your** **key** **result.** • **Motivation,**
@@ -310,7 +301,7 @@ NLP Module — Assignment 2: Irish→English Speech Translation
 ||
 ||
 
-**10.** **Distinction-Level** **Expectations**
+## **10.** **Distinction-Level** **Expectations**
 
 A distinction (typically 70%+) will typically demonstrate several of the
 following:
@@ -330,7 +321,7 @@ following:
 > context. • Polished, publication-ready writing with correctly
 > formatted citations.
 
-**11.** **Academic** **Integrity** **and** **AI** **Use**
+## **11.** **Academic** **Integrity** **and** **AI** **Use**
 
 You are permitted to use AI writing and coding assistants (e.g. ChatGPT,
 Claude, Copilot, Gemini). However, the following rules apply:
@@ -350,7 +341,7 @@ Undisclosed AI use, or submission of work that is substantially
 another’s, constitutes academic misconduct and will be dealt with under
 university policy.
 
-**12.** **Submission** **Instructions**
+## **12.** **Submission** **Instructions**
 
 Submit all materials as a single ZIP archive via the module submission
 portal on Blackboard/Moodle. Name your archive as follows:
