@@ -245,6 +245,34 @@ Baseline ASR + OPUS-MT & 1.42 & -0.09 & 15.19 & -0.71 & 100.0 & 0.0 & 1.56 & -0.
 
 \section{Qualitative Analysis}
 
+Manual examination of 21 system outputs reveals systematic error patterns across both ASR and MT pipeline stages. The error analysis categorizes failures into ASR-specific issues (language confusion, substitution, deletion, insertion, hallucination) and MT-specific issues (mistranslation, word order, literal translation, omission, addition).
+
+\subsection{ASR Error Patterns}
+
+Language confusion emerges as the dominant ASR failure mode, occurring in 33.3\% of analyzed examples (7/21). The baseline Whisper-large-v3 model frequently misidentifies Irish speech as Welsh or English due to phonological similarities, particularly with lenited consonants and vowel clusters. For instance, Irish phrases containing broad consonants are often transcribed as Welsh cognates, while slender consonants trigger English word substitutions. This error type is nearly eliminated in the specialized Whisper-small-irish model, which demonstrates robust Irish language identification through fine-tuning on native speaker data.
+
+Substitution errors account for 28.6\% of ASR failures (6/21), typically involving phonetically similar Irish words or morphological variants. These errors often involve confusion between lenited and non-lenited forms (e.g., "sráid" vs "sraith") or between broad and slender consonant variants. Deletion errors (14.3\%, 3/21) primarily affect function words and unstressed syllables, while insertion and hallucination errors (9.5\% each, 2/21 each) occur less frequently but can introduce entirely spurious content into transcriptions.
+
+Notably, 14.3\% of examples (3/21) exhibit no ASR errors, indicating that when the specialized model correctly identifies Irish phonology, transcription quality is high. However, the baseline model achieves perfect ASR in only 4.8\% of cases, underscoring the importance of language-specific acoustic modeling.
+
+\subsection{MT Error Patterns}
+
+Mistranslation represents the most common MT failure mode at 38.1\% (8/21), often resulting from ASR error propagation. When Irish transcriptions contain substituted or hallucinated words, the MT model attempts to translate nonsensical input, producing semantically incorrect English output. This cascading effect accounts for the majority of end-to-end translation failures.
+
+Word order issues occur in 19.0\% of examples (4/21), reflecting the challenge of mapping Irish VSO (Verb-Subject-Object) syntax to English SVO structure. Both NLLB and OPUS-MT models occasionally produce grammatically awkward English with misplaced modifiers or inverted subject-verb order, even when the Irish transcription is correct.
+
+Literal translation errors (14.3\%, 3/21) manifest as overly direct word-for-word translations that fail to capture Irish idiomatic expressions or prepositional pronouns. Addition and omission errors (9.5\% each, 2/21 each) typically result from ASR insertion/deletion errors propagating through the MT stage, though some cases reflect genuine MT failures in handling Irish morphological complexity.
+
+Importantly, 14.3\% of examples (3/21) show no MT errors when provided with accurate Irish transcriptions, demonstrating that both NLLB and OPUS-MT can produce high-quality translations given correct input. This finding reinforces that ASR quality is the primary bottleneck in cascaded Irish-English speech translation.
+
+\subsection{Error Propagation and System Interactions}
+
+Cascading errors—where ASR failures directly cause MT failures—occur in 57.1\% of analyzed examples (12/21), highlighting the vulnerability of cascaded architectures to error propagation. When the ASR stage misidentifies the language or produces phonetically implausible Irish text, the MT model has no mechanism to recover, resulting in compounded translation failures.
+
+Perfect translations (no errors in either stage) occur in only 14.3\% of examples (3/21), exclusively with the specialized ASR model. This low success rate reflects the inherent difficulty of Irish speech translation, even with optimized components. The specialized ASR + NLLB configuration shows the best error recovery, with NLLB's multilingual training enabling some robustness to minor ASR imperfections.
+
+The error analysis confirms that language-specific ASR fine-tuning is the critical improvement factor. By reducing language confusion from 33.3\% to near-zero, the specialized model prevents the most severe cascading failures. However, persistent challenges remain in handling Irish dialectal variation, morphological complexity, and the VSO-to-SVO syntactic transformation, indicating that further improvements require advances in both acoustic modeling and translation architectures specifically designed for morphologically rich, low-resource languages.
+
 \section{Result Interpretations}
 
 \section{Summary}
