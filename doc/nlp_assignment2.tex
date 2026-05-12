@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[final]{acl}
+
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{microtype}
+
+\usepackage{inconsolata}
+
+\usepackage{graphicx}
+
+\usepackage{booktabs}
+
+\usepackage{rotating}
+
+\usepackage{url}
+
+\title{NLP Assignment 2}
+
+\author{ Author \\
+  MTU / (John) Paul Nagle \\
+  \texttt{John.P.Nagle@mymtu.ie} \\}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This paper presents a cascaded speech-to-text translation system for the low-resource Irish-to-English language pair, developed as part of the Natural Language Processing 
+module for the M.Sc. in AI at MTU. It addresses the challenges of translating Irish (Gaeilge) speech while implementing a two-stage pipeline combining Automatic Speech 
+Recognition (ASR) and Machine Translation (MT) components. The baseline system integrates OpenAI's Whisper model \citep{radford2023whisper} for ASR with Meta's NLLB-200 
+\citep{nllb2022} for neural machine translation. To address the low-resource nature of Irish, we develop an improved system utilising Irish-specific fine-tuned Whisper 
+models that better handle the language's unique phonological characteristics. We evaluate both systems on the IWSLT 2026 Irish-English test set using standard metrics 
+including BLEU \citep{papineni2002bleu} and chrF++ \citep{popovic2015chrf}, with comprehensive error analysis identifying common failure modes such as language misidentification 
+and morphological errors. Our results demonstrate the effectiveness of language-specific model adaptation in low-resource settings, while highlighting persistent challenges 
+in cascaded architectures including error propagation from ASR to MT stages.
+\end{abstract}
+
+\section{Problem Statement}
+
+This work addresses the challenge of low-resource speech-to-text translation for the Irish-to-English language pair. Speech translation (ST) — converting spoken audio in one 
+language into text in another — presents significant difficulties for low-resource languages like Irish (Gaeilge), which has limited transcribed audio data and fewer high-quality 
+pretrained models compared to well-resourced languages.
+
+We implement a cascaded pipeline architecture combining Automatic Speech Recognition (ASR) and Machine Translation (MT) components. This approach offers practical advantages 
+in low-resource settings: ASR and MT components can be independently pretrained on large datasets, errors can be diagnosed at each stage, and strong off-the-shelf models are 
+readily available. Our baseline system integrates OpenAI's Whisper model for ASR with Meta's NLLB-200 for neural machine translation.
+
+The primary research question is: \textit{How can we improve translation quality for low-resource Irish speech by optimizing component selection in a cascaded pipeline?} 
+We evaluate two key dimensions: (1) the impact of Irish-specific fine-tuned ASR models versus general multilingual models, and (2) the comparative performance of multilingual 
+(NLLB-200) versus bilingual (OPUS-MT) translation models. Our evaluation uses the IWSLT 2026 Irish-English dataset \citep{iwslt2026dataset}, measuring performance through 
+BLEU, chrF++, and COMET metrics while conducting systematic error analysis to identify failure modes specific to Irish morphology and phonology.
+
+\section{Dataset}
+
+We utilize the IWSLT 2026 Irish-English speech translation dataset \citep{iwslt2026dataset}, which provides parallel Irish speech and English text for low-resource speech 
+translation research. For this work, we exclusively use the development split located in \texttt{iwslt2026\_ga-eng/iwslt2025\_ga-eng/dev/}, as it is the only subset providing 
+both Irish audio files (\texttt{wav/}) and corresponding English reference translations (\texttt{txt/}).
+
+\subsection{Dataset Composition}
+
+The development set contains 1120 audio samples with corresponding English translations. This limited dataset size reflects the low-resource nature of Irish speech translation 
+and necessitates reliance on pretrained models rather than training from scratch. While the dataset includes additional splits (training and test sets), these were not 
+utilised in our pipelines due to the absence of paired English translations required for evaluation.
+
+\subsection{Audio Characteristics}
+
+All audio files are provided in WAV format with 16kHz sampling rate, mono channel configuration. Audio segments vary in duration, with filenames set so that an alphabetical listing
+matches the order of the translations in the dev.eng. The dataset includes both individual utterances and slightly longer continuous speech segments, reflecting realistic single sentance 
+speech translation scenarios, but not longer conversations.
+
+\subsection{Annotation Format}
+
+Ground truth annotations are provided in TSV format (\texttt{stamped.tsv}) containing three fields: audio filename, start timestamp, and length in seconds. 
+In some of the other unused data folders, english reference texts are also available as plain text files (\texttt{train.eng}, \texttt{dev.eng}, \texttt{test.eng}), but in the dev 
+set we only have the dev.eng file for translations.
+
+\subsection{Preprocessing}
+
+Audio preprocessing is minimal to preserve authentic speech characteristics. We load audio files using the \texttt{librosa} library with 16kHz sampling rate to match 
+Whisper model requirements. No additional noise reduction, normalization, or voice activity detection is applied, as pretrained models are designed to handle raw speech input. 
+For translation evaluation, we tokenize reference texts using standard whitespace splitting to compute BLEU and chrF++ metrics.
+
+\subsection{Dataset Challenges}
+
+The dataset presents several challenges characteristic of low-resource speech translation: (1) extremely limited training data (1120 samples) necessitating reliance on 
+pretrained models, (2) Irish phonological complexity including lenition, eclipsis, and dialectal variation, and (3) morphological richness with extensive inflection and mutation 
+systems.
+
+
+\section{Pipeline Architectures}
+
+Baseline and improved pipeline architectures with justifications.
+
+\section{Experiment}
+
+\subsection{Evaluation Setup}
+
+Footnotes are inserted with the \verb|\footnote| command.\footnote{This is a footnote.}
+
+\subsection{Metrics}
+
+metrics
+
+\subsection{Experimental Conditions}
+
+\subsection{Citations}
+
+You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
+
+\citep{Gusfield:97}
+
+\section{BLEU/chrF++ Scores}
+
+\begin{table*}[!]
+\centering
+\caption{Overall Comparison Table}
+\label{tab:system-comparison}
+\footnotesize
+\begin{tabular}{@{}lrrrrrrrrrrr@{}}
+\toprule
+\textbf{System} & \rotatebox{90}{\textbf{Samples}} & \rotatebox{90}{\textbf{Valid}} & \rotatebox{90}{\textbf{BLEU}} & \rotatebox{90}{\textbf{chrF++}} & \rotatebox{90}{\textbf{COMET}} & \rotatebox{90}{\textbf{Coverage}} & \rotatebox{90}{\textbf{Rep \%}} & \rotatebox{90}{\textbf{Avg Hyp Len}} & \rotatebox{90}{\textbf{Avg Ref Len}} & \rotatebox{90}{\textbf{Length Ratio}} & \rotatebox{90}{\textbf{Avg Time/File (s)}} \\
+\midrule
+Specialised ASR+NLLB & 1120 & 1120 & 4.36 & 22.25 & 0.4752 & 100.0 & 2.59 & 10.40 & 9.88 & 1.05 & 0.82  \\
+Specialised ASR+OPUS-MT & 1120 & 1120 & 3.40 & 21.56 & 0.4384 & 100.0 & 0.62 & 10.55 & 9.88 & 1.07 & 0.64  \\
+Baseline ASR+NLLB & 1120 & 1120 & 1.51 & 15.90 & 0.4375 & 100.0 & 4.11 & 10.31 & 9.88 & 1.04 & 1.70  \\
+Baseline ASR+OPUS-MT & 1120 & 1120 & 1.42 & 15.19 & 0.4168 & 100.0 & 2.32 & 10.07 & 9.88 & 1.02 & 1.56  \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[!]
+\centering
+\caption{Relative Comparison vs Baseline ASR + NLLB}
+\label{tab:relative-comparison}
+\footnotesize
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+\textbf{System} & \rotatebox{90}{\textbf{BLEU}} & \rotatebox{90}{\textbf{BLEU $\Delta$ vs Baseline}} & \rotatebox{90}{\textbf{chrF++}} & \rotatebox{90}{\textbf{chrF++ $\Delta$ vs Baseline}} & \rotatebox{90}{\textbf{Coverage}} & \rotatebox{90}{\textbf{Coverage $\Delta$ vs Baseline}} & \rotatebox{90}{\textbf{Avg Time/File (s)}} & \rotatebox{90}{\textbf{Time/File $\Delta$ vs Baseline}} \\
+\midrule
+Specialised ASR + NLLB & 4.36 & 2.85 & 22.25 & 6.35 & 100.0 & 0.0 & 0.82 & -0.88 \\
+Specialised ASR + OPUS-MT & 3.40 & 1.89 & 21.56 & 5.66 & 100.0 & 0.0 & 0.64 & -1.06 \\
+Baseline ASR + NLLB & 1.51 & 0.00 & 15.90 & 0.00 & 100.0 & 0.0 & 1.70 & 0.00 \\
+Baseline ASR + OPUS-MT & 1.42 & -0.09 & 15.19 & -0.71 & 100.0 & 0.0 & 1.56 & -0.14 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+
+
+\section{Qualitative Analysis}
+
+\section{Result Interpretations}
+
+\section{Summary}
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{anthology,custom}
+% Custom bibliography entries only
+\bibliography{custom}
+
+\appendix
+
+\section{AI Use Declaration}
+\label{sec:appendix}
+
+I used AI to blah blah blah.
+
+\end{document}
