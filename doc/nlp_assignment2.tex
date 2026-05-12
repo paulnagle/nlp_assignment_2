@@ -35,12 +35,12 @@
 \maketitle
 \begin{abstract}
 This paper presents a cascaded speech-to-text translation system for the low-resource Irish-to-English language pair, developed as part of the Natural Language Processing 
-module for the M.Sc. in AI at MTU. It addresses the challenges of translating Irish (Gaeilge) speech while implementing a two-stage pipeline combining Automatic Speech 
+module for the M.Sc. in AI at MTU. It addresses the challenges of translating Irish (Gaeilge) speech to English while implementing a two-stage pipeline combining Automatic Speech 
 Recognition (ASR) and Machine Translation (MT) components. The baseline system integrates OpenAI's Whisper model \citep{radford2023whisper} for ASR with Meta's NLLB-200 
-\citep{nllb2022} for neural machine translation. To address the low-resource nature of Irish, we develop an improved system utilising Irish-specific fine-tuned Whisper 
-models that better handle the language's unique phonological characteristics. We evaluate both systems on the IWSLT 2026 Irish-English test set using standard metrics 
-including BLEU \citep{papineni2002bleu} and chrF++ \citep{popovic2015chrf}, with comprehensive error analysis identifying common failure modes such as language misidentification 
-and morphological errors. Our results demonstrate the effectiveness of language-specific model adaptation in low-resource settings, while highlighting persistent challenges 
+\citep{nllb2022} for neural machine translation. To address the low-resource nature of the Irish language, we develop an improved system utilising Irish-specific fine-tuned Whisper 
+models that better handle the language's unique phonological characteristics. We evaluate both systems on the IWSLT 2026 Irish-English test set using standard metrics
+including BLEU \citep{papineni2002bleu}, chrF++ \citep{popovic2015chrf}, and COMET \citep{rei2020comet}, with comprehensive error analysis identifying common failure modes such as language misidentification
+and morphological errors. Our results demonstrate the effectiveness of language-specific model adaptation in low-resource settings, while highlighting persistent challenges
 in cascaded architectures including error propagation from ASR to MT stages.
 \end{abstract}
 
@@ -54,39 +54,39 @@ We implement a cascaded pipeline architecture combining Automatic Speech Recogni
 in low-resource settings: ASR and MT components can be independently pretrained on large datasets, errors can be diagnosed at each stage, and strong off-the-shelf models are 
 readily available. Our baseline system integrates OpenAI's Whisper model for ASR with Meta's NLLB-200 for neural machine translation.
 
-The primary research question is: \textit{How can we improve translation quality for low-resource Irish speech by optimizing component selection in a cascaded pipeline?} 
-We evaluate two key dimensions: (1) the impact of Irish-specific fine-tuned ASR models versus general multilingual models, and (2) the comparative performance of multilingual 
-(NLLB-200) versus bilingual (OPUS-MT) translation models. Our evaluation uses the IWSLT 2026 Irish-English dataset \citep{iwslt2026dataset}, measuring performance through 
+The primary research question is: \textit{How can we improve translation quality for low-resource Irish speech by optimizing component selection in a cascaded pipeline?}
+We evaluate two key dimensions: (1) the impact of Irish-specific fine-tuned ASR models versus general multilingual models, and (2) the comparative performance of multilingual
+(NLLB-200) versus bilingual (OPUS-MT \citep{opus-mt-ga-en}) translation models. Our evaluation uses the IWSLT 2026 Irish-English dataset \citep{iwslt2026dataset}, measuring performance through
 BLEU, chrF++, and COMET metrics while conducting systematic error analysis to identify failure modes specific to Irish morphology and phonology.
 
 \section{Dataset}
 
-We utilize the IWSLT 2026 Irish-English speech translation dataset \citep{iwslt2026dataset}, which provides parallel Irish speech and English text for low-resource speech 
+We utilise the IWSLT 2026 Irish-English speech translation dataset \citep{iwslt2026dataset}, which provides parallel Irish speech and English text for low-resource speech 
 translation research. For this work, we exclusively use the development split located in \texttt{iwslt2026\_ga-eng/iwslt2025\_ga-eng/dev/}, as it is the only subset providing 
 both Irish audio files (\texttt{wav/}) and corresponding English reference translations (\texttt{txt/}).
 
 \subsection{Dataset Composition}
 
-The development set contains 1120 audio samples with corresponding English translations. This limited dataset size reflects the low-resource nature of Irish speech translation 
+The development set contains 1120 audio samples with corresponding English translations. This relatively limited dataset size reflects the low-resource nature of Irish speech translation 
 and necessitates reliance on pretrained models rather than training from scratch. While the dataset includes additional splits (training and test sets), these were not 
 utilised in our pipelines due to the absence of paired English translations required for evaluation.
 
 \subsection{Audio Characteristics}
 
 All audio files are provided in WAV format with 16kHz sampling rate, mono channel configuration. Audio segments vary in duration, with filenames set so that an alphabetical listing
-matches the order of the translations in the dev.eng. The dataset includes both individual utterances and slightly longer continuous speech segments, reflecting realistic single sentance 
-speech translation scenarios, but not longer conversations.
+matches the order of the translations in the dev.eng. The dataset includes mostly individual utterances and some slightly longer continuous speech segments, reflecting realistic single 
+sentance speech translation scenarios, but not longer conversations.
 
 \subsection{Annotation Format}
 
 Ground truth annotations are provided in TSV format (\texttt{stamped.tsv}) containing three fields: audio filename, start timestamp, and length in seconds. 
 In some of the other unused data folders, english reference texts are also available as plain text files (\texttt{train.eng}, \texttt{dev.eng}, \texttt{test.eng}), but in the dev 
-set we only have the dev.eng file for translations.
+set we only have the \texttt{dev.eng} file for translations.
 
 \subsection{Preprocessing}
 
 Audio preprocessing is minimal to preserve authentic speech characteristics. We load audio files using the \texttt{librosa} library with 16kHz sampling rate to match 
-Whisper model requirements. No additional noise reduction, normalization, or voice activity detection is applied, as pretrained models are designed to handle raw speech input. 
+Whisper model requirements. No additional noise reduction, normalisation, or voice activity detection is applied, as pretrained models are designed to handle raw speech input. 
 For translation evaluation, we tokenize reference texts using standard whitespace splitting to compute BLEU and chrF++ metrics.
 
 \subsection{Dataset Challenges}
@@ -98,7 +98,8 @@ systems.
 
 \section{Pipeline Architectures}
 
-We implement four cascaded speech translation systems combining different ASR and MT components. All systems follow a two-stage architecture: audio → Irish transcription (ASR) → English translation (MT).
+We implement four cascaded speech translation systems combining different ASR and MT components. All systems follow a two-stage architecture: audio → Irish transcription (ASR) → English 
+translation (MT).
 
 \subsection{Baseline System: Whisper-Large + NLLB}
 
@@ -109,15 +110,16 @@ relying on its general multilingual capabilities.
 For translation, NLLB-200 (600M parameters) supports 200 languages including Irish (\texttt{gle\_Latn}) and English (\texttt{eng\_Latn}). We configure the model with forced BOS token for 
 target language specification and beam search (num\_beams=5) for improved output quality.
 
-\textbf{Pipeline flow:} Audio (16kHz WAV) → Whisper processor (mel-spectrogram extraction, 80 mel bins) → Whisper encoder-decoder → Irish transcript → NLLB tokenizer → NLLB encoder-decoder → English translation.
+\textbf{Pipeline flow:} Audio (16kHz WAV) → Whisper processor (mel-spectrogram extraction, 80 mel bins) → Whisper encoder-decoder → Irish transcript → NLLB tokenizer → NLLB encoder-decoder 
+→ English translation.
 
-\textbf{Justification:} This baseline represents a strong starting point using state-of-the-art multilingual models with proven performance across diverse languages. Both models are readily available 
-via HuggingFace and require no additional training.
+\textbf{Justification:} This baseline represents a strong starting point using state-of-the-art multilingual models with proven performance across diverse languages. Both models are 
+readily available via HuggingFace and require no additional training.
 
 \subsection{Improved System 1: Specialised Whisper + NLLB}
 
-The first improvement replaces the general Whisper model with InoWouw/whisper-small-irish \citep{whisper-small-irish}, a Whisper-small variant (244M parameters) fine-tuned specifically on Irish speech 
-data. This model addresses the baseline's tendency to misidentify Irish as Welsh or English due to phonological similarities.
+The first improvement replaces the general Whisper model with InoWouw/whisper-small-irish \citep{whisper-small-irish}, a Whisper-small variant (244M parameters) fine-tuned specifically 
+on Irish speech data. This model addresses the baseline's tendency to misidentify Irish as Welsh or English due to phonological similarities.
 
 \textbf{Key modifications:}
 \begin{itemize}
@@ -184,7 +186,9 @@ Additionally, we report diagnostic metrics: \textbf{Coverage} (proportion of non
 
 \subsection{Experimental Conditions}
 
-All experiments run on Google Colab with NVIDIA L4 GPU. Models are loaded in float32 precision to avoid numerical instability. ASR models use beam search decoding with default parameters. MT models employ beam search with num\_beams=5 and early\_stopping=True for improved output quality.
+All experiments run on Google Colab with NVIDIA L4 GPU. We experienced Out Of Memory errors when running with the T4 GPU, which has a memory of 16GB, so we needed to upgrade to the L4 runtime in Google Colab. Using Google Colab was not practical without upgrading to the Pro edition, which came at a small financial cost.
+
+All Models are loaded in float32 precision to avoid numerical instability. ASR models use beam search decoding with default parameters. MT models employ beam search with num\_beams=5 and early\_stopping=True for improved output quality.
 
 The complete development set (1120 samples) is processed for each system configuration. Processing times vary by model size: baseline systems (Whisper-large-v3 + NLLB/OPUS-MT) average 1.56-1.70 seconds per file, while specialised systems (Whisper-small-irish + NLLB/OPUS-MT) average 0.64-0.82 seconds per file due to the smaller ASR model (244M vs 1.5B parameters).
 
@@ -308,5 +312,9 @@ AI tools were used in the following capacities during this assignment:
 \textbf{Analysis and Interpretation:} All experimental design decisions, error analysis, result interpretations, and conclusions are my own work. AI tools were not used to generate analytical insights or draw conclusions from the experimental results.
 
 The core intellectual contributions—including research question formulation, experimental design, system architecture decisions, error pattern identification, and critical analysis—represent my independent work. AI tools served as productivity aids for implementation and documentation tasks, similar to how one might use a spell checker or code formatter.
+
+\textbf{Code Availability:} The complete implementation code for all code is available at: \url{https://github.com/paulnagle/nlp_assignment_2}
+
+The runtime execution of the notebook can be viewed at \url{https://colab.research.google.com/drive/1YQPvNt7zn2YQBCGtewzAi7ro3Kz6nVpi}
 
 \end{document}
