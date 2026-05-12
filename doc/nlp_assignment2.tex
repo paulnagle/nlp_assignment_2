@@ -5,6 +5,7 @@
 \usepackage[final]{acl}
 
 \usepackage{times}
+
 \usepackage{latexsym}
 
 \usepackage[T1]{fontenc}
@@ -101,17 +102,22 @@ We implement four cascaded speech translation systems combining different ASR an
 
 \subsection{Baseline System: Whisper-Large + NLLB}
 
-Our baseline combines OpenAI's Whisper-large-v3 \citep{radford2023whisper} for ASR with Meta's NLLB-200-distilled-600M \citep{nllb2022} for MT. Whisper-large-v3 (1.5B parameters) is a multilingual ASR model trained on 680,000 hours of audio across 99 languages including Irish. We use the model without language-specific fine-tuning, relying on its general multilingual capabilities.
+Our baseline combines OpenAI's Whisper-large-v3 \citep{radford2023whisper,whisper-large-v3} for ASR with Meta's NLLB-200-distilled-600M \citep{nllb2022,nllb-distilled} for MT. 
+Whisper-large-v3 (1.5B parameters) is a multilingual ASR model trained on 680,000 hours of audio across 99 languages including Irish. We use the model without language-specific fine-tuning, 
+relying on its general multilingual capabilities.
 
-For translation, NLLB-200 (600M parameters) supports 200 languages including Irish (\texttt{gle\_Latn}) and English (\texttt{eng\_Latn}). We configure the model with forced BOS token for target language specification and beam search (num\_beams=5) for improved output quality.
+For translation, NLLB-200 (600M parameters) supports 200 languages including Irish (\texttt{gle\_Latn}) and English (\texttt{eng\_Latn}). We configure the model with forced BOS token for 
+target language specification and beam search (num\_beams=5) for improved output quality.
 
 \textbf{Pipeline flow:} Audio (16kHz WAV) → Whisper processor (mel-spectrogram extraction, 80 mel bins) → Whisper encoder-decoder → Irish transcript → NLLB tokenizer → NLLB encoder-decoder → English translation.
 
-\textbf{Justification:} This baseline represents a strong starting point using state-of-the-art multilingual models with proven performance across diverse languages. Both models are readily available via HuggingFace and require no additional training.
+\textbf{Justification:} This baseline represents a strong starting point using state-of-the-art multilingual models with proven performance across diverse languages. Both models are readily available 
+via HuggingFace and require no additional training.
 
 \subsection{Improved System 1: Specialized Whisper + NLLB}
 
-The first improvement replaces the general Whisper model with InoWouw/whisper-small-irish, a Whisper-small variant (244M parameters) fine-tuned specifically on Irish speech data. This model addresses the baseline's tendency to misidentify Irish as Welsh or English due to phonological similarities.
+The first improvement replaces the general Whisper model with InoWouw/whisper-small-irish \citep{whisper-small-irish}, a Whisper-small variant (244M parameters) fine-tuned specifically on Irish speech 
+data. This model addresses the baseline's tendency to misidentify Irish as Welsh or English due to phonological similarities.
 
 \textbf{Key modifications:}
 \begin{itemize}
@@ -121,11 +127,13 @@ The first improvement replaces the general Whisper model with InoWouw/whisper-sm
 \item Identical NLLB-200 MT component as baseline
 \end{itemize}
 
-\textbf{Justification:} Language-specific fine-tuning should improve ASR accuracy for Irish phonological features (lenition, eclipsis, broad/slender consonants), reducing error propagation to the MT stage. The smaller model size also improves inference speed.
+\textbf{Justification:} Language-specific fine-tuning should improve ASR accuracy for Irish phonological features (lenition, eclipsis, broad/slender consonants), reducing error propagation to the MT 
+stage. The smaller model size also improves inference speed.
 
 \subsection{Improved System 2: Whisper-Large + OPUS-MT}
 
-This variant maintains the baseline Whisper-large-v3 ASR but replaces NLLB with Helsinki-NLP's opus-mt-ga-en, a bilingual Irish-English translation model from the OPUS-MT family. Unlike NLLB's multilingual approach, OPUS-MT is trained exclusively on Irish-English parallel data.
+This variant maintains the baseline Whisper-large-v3 ASR but replaces NLLB with Helsinki-NLP's opus-mt-ga-en \citep{opus-mt-ga-en}, a bilingual Irish-English translation model from the OPUS-MT family. 
+Unlike NLLB's multilingual approach, OPUS-MT is trained exclusively on Irish-English parallel data.
 
 \textbf{Key modifications:}
 \begin{itemize}
@@ -135,37 +143,68 @@ This variant maintains the baseline Whisper-large-v3 ASR but replaces NLLB with 
 \item Same beam search configuration (num\_beams=5)
 \end{itemize}
 
-\textbf{Justification:} Bilingual models often outperform multilingual models on specific language pairs due to focused training. OPUS-MT may better handle Irish-specific translation challenges like VSO word order and prepositional pronouns.
+\textbf{Justification:} Bilingual models often outperform multilingual models on specific language pairs due to focused training. OPUS-MT may better handle Irish-specific translation challenges like 
+VSO word order and prepositional pronouns.
 
 \subsection{Improved System 3: Specialized Whisper + OPUS-MT}
 
-Our best-performing system combines both improvements: Irish-specific ASR (InoWouw/whisper-small-irish) with bilingual MT (opus-mt-ga-en). This architecture optimizes both pipeline stages for the Irish-English language pair.
+Our best-performing system combines both improvements: Irish-specific ASR (InoWouw/whisper-small-irish) with bilingual MT (opus-mt-ga-en). This architecture optimizes both pipeline stages for the Irish-English 
+language pair.
 
-\textbf{Justification:} Combining specialized ASR and focused MT should provide synergistic improvements. Better Irish transcriptions from the specialized ASR reduce MT errors, while the bilingual MT model better handles the improved Irish input. This represents the most language-pair-specific configuration tested.
+\textbf{Justification:} Combining specialized ASR and focused MT should provide synergistic improvements. Better Irish transcriptions from the specialized ASR reduce MT errors, while the bilingual 
+MT model better handles the improved Irish input. This represents the most language-pair-specific configuration tested.
 
 \subsection{Implementation Details}
 
-All systems share common preprocessing: audio resampling to 16kHz mono using librosa, Whisper feature extraction with 80 mel-frequency bins, and beam search decoding. We process the complete IWSLT 2026 development set (1120 samples) for each system. Models run on GPU (CUDA) with float32 precision to ensure numerical stability. No audio augmentation or text post-processing is applied to maintain fair comparison across systems.
+All systems share common preprocessing: audio resampling to 16kHz mono using librosa, Whisper feature extraction with 80 mel-frequency bins, and beam search decoding. We process the complete IWSLT 
+2026 development set (1120 samples) for each system. Models run on GPU (CUDA) with float32 precision to ensure numerical stability. No audio augmentation or text post-processing is applied to maintain 
+fair comparison across systems.
 
 \section{Experiment}
 
 \subsection{Evaluation Setup}
 
-Footnotes are inserted with the \verb|\footnote| command.\footnote{This is a footnote.}
+We evaluate all four pipeline systems on the complete IWSLT 2026 development set (1120 audio samples). Each system processes the same input audio files through its respective ASR and MT components, producing English translations that are compared against reference translations using automated metrics.
+
+The evaluation pipeline follows a consistent procedure across all systems: (1) audio files are loaded and resampled to 16kHz mono format using librosa, (2) ASR models transcribe audio to Irish text, (3) MT models translate Irish transcriptions to English, and (4) outputs are evaluated against reference translations. All models run on GPU (NVIDIA L4) with float32 precision to ensure numerical stability and reproducibility.
+
+We set random seed to 42 across all random number generators (Python random, NumPy, PyTorch) to ensure reproducible results. No audio augmentation, voice activity detection, or text post-processing is applied to maintain fair comparison across systems.
 
 \subsection{Metrics}
 
-metrics
+We employ three complementary automatic evaluation metrics to assess translation quality:
+
+\textbf{BLEU} \citep{papineni2002bleu}: Measures n-gram precision between hypothesis and reference translations (1-4 grams). We use SacreBLEU implementation for reproducibility. BLEU is the standard MT metric but can be overly sensitive to word choice variations.
+
+\textbf{chrF++} \citep{popovic2015chrf}: Character-level F-score metric with word n-gram bonuses (word\_order=2). More robust than BLEU for morphologically rich languages like Irish, as it captures partial matches at character level and is less sensitive to word order variations.
+
+\textbf{COMET} \citep{rei2020comet}: Neural metric (wmt22-comet-da model) that uses cross-lingual embeddings to assess semantic similarity. Correlates better with human judgments than surface-form metrics but requires more computational resources.
+
+Additionally, we report diagnostic metrics: \textbf{Coverage} (proportion of non-empty outputs), \textbf{Repetition Rate} (frequency of degenerate repeated n-grams), \textbf{Length Ratio} (hypothesis/reference length), and \textbf{Processing Time} (average seconds per file).
 
 \subsection{Experimental Conditions}
 
-\subsection{Citations}
+All experiments run on Google Colab with NVIDIA L4 GPU. Models are loaded in float32 precision to avoid numerical instability. ASR models use beam search decoding with default parameters. MT models employ beam search with num\_beams=5 and early\_stopping=True for improved output quality.
 
-You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
+The complete development set (1120 samples) is processed for each system configuration. Processing times vary by model size: baseline systems (Whisper-large-v3 + NLLB/OPUS-MT) average 1.56-1.70 seconds per file, while specialized systems (Whisper-small-irish + NLLB/OPUS-MT) average 0.64-0.82 seconds per file due to the smaller ASR model (244M vs 1.5B parameters).
 
-\citep{Gusfield:97}
+All systems achieve 100\% coverage (no empty outputs), indicating robust pipeline operation. Evaluation uses the \texttt{evaluate} library for BLEU/chrF++ and \texttt{unbabel-comet} for COMET scoring, with batch\_size=8 and gpus=1 for COMET inference.
 
-\section{BLEU/chrF++ Scores}
+\section{BLEU/chrF++/COMET Scores}
+
+Table~\ref{tab:system-comparison} presents comprehensive evaluation results for all four pipeline configurations on the IWSLT 2026 development set (1120 samples). The Specialised ASR + NLLB system achieves the highest BLEU score (4.36) and chrF++ score (22.25), representing substantial improvements of +2.85 BLEU and +6.35 chrF++ over the baseline (Table~\ref{tab:relative-comparison}). The Specialised ASR + OPUS-MT configuration follows closely with BLEU 3.40 and chrF++ 21.56, showing gains of +1.89 BLEU and +5.66 chrF++ relative to baseline.
+
+The baseline systems demonstrate significantly lower performance, with Baseline ASR + NLLB achieving BLEU 1.51 and chrF++ 15.90, while Baseline ASR + OPUS-MT scores marginally lower at BLEU 1.42 and chrF++ 15.19. Notably, switching from NLLB to OPUS-MT in the baseline configuration yields minimal improvement (-0.09 BLEU, -0.71 chrF++), suggesting that MT model selection has limited impact when ASR quality is poor.
+
+COMET scores reveal a different pattern: Specialised ASR + NLLB achieves the highest semantic similarity (0.4752), followed by Specialised ASR + OPUS-MT (0.4384), Baseline ASR + NLLB (0.4375), and Baseline ASR + OPUS-MT (0.4168). The relatively modest COMET differences compared to surface-form metrics suggest that while specialized ASR improves lexical accuracy substantially, semantic content preservation remains challenging across all systems.
+
+All systems achieve 100\% coverage with no empty outputs, indicating robust pipeline operation. However, repetition rates vary considerably: Baseline ASR + NLLB exhibits the highest repetition rate (4.11\%), while Specialised ASR + OPUS-MT shows the lowest (0.62\%). This suggests that improved ASR quality reduces degenerate MT outputs, particularly when combined with the bilingual OPUS-MT model.
+
+Length ratios remain close to 1.0 across all systems (1.02-1.07), indicating that hypothesis lengths approximate reference lengths reasonably well. Average hypothesis lengths range from 10.07 to 10.55 words compared to the reference average of 9.88 words, with specialized systems producing slightly longer outputs.
+
+Processing efficiency differs substantially between baseline and specialized systems. Baseline configurations average 1.56-1.70 seconds per file due to the large Whisper-large-v3 model (1.5B parameters), while specialized systems process files in 0.64-0.82 seconds using the smaller Whisper-small-irish model (244M parameters). This represents a 52-62\% reduction in processing time while simultaneously improving translation quality.
+
+The results demonstrate that Irish-specific ASR fine-tuning is the primary driver of translation improvements in cascaded pipelines. The specialized ASR model's superior handling of Irish phonology (lenition, eclipsis, dialectal variation) reduces error propagation to the MT stage. MT model selection (NLLB vs OPUS-MT) shows secondary importance: NLLB performs better with specialized ASR (+0.96 BLEU over OPUS-MT), while both MT models perform similarly poorly with baseline ASR. This suggests that high-quality Irish transcriptions enable NLLB's multilingual capabilities to function effectively, whereas poor transcriptions limit both MT approaches equally.
 
 \begin{table*}[!]
 \centering

@@ -1,15 +1,34 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 
-\bibitem[{Gusfield(1997)}]{Gusfield:97}
-Dan Gusfield. 1997.
-\newblock \emph{Algorithms on Strings, Trees and Sequences}.
-\newblock Cambridge University Press, Cambridge, UK.
+\bibitem[{{Helsinki-NLP}(2020)}]{opus-mt-ga-en}
+{Helsinki-NLP}. 2020.
+\newblock {OPUS-MT} irish-english translation model.
+\newblock \url{https://huggingface.co/Helsinki-NLP/opus-mt-ga-en}.
+\newblock License: Apache-2.0.
+
+\bibitem[{InoWouw(2023)}]{whisper-small-irish}
+InoWouw. 2023.
+\newblock Whisper small irish.
+\newblock \url{https://huggingface.co/InoWouw/whisper-small-irish}.
+\newblock License: Apache-2.0.
+
+\bibitem[{{Meta AI}(2022)}]{nllb-distilled}
+{Meta AI}. 2022.
+\newblock {NLLB}-200 distilled 600m.
+\newblock \url{https://huggingface.co/facebook/nllb-200-distilled-600M}.
+\newblock License: CC-BY-NC-4.0.
 
 \bibitem[{{NLLB Team} et~al.(2022){NLLB Team}, Costa-juss{\`a}, Cross, {\c{C}}elebi, Elbayad, Heafield, Heffernan, Kalbassi, Lam, Licht, Maillard, Sun, Wang, Wenzek, Youngblood, Akula, Barrault, Mejia-Gonzalez, Hansanti, Hoffman, Jarrett, Sadagopan, Rowe, Spruit, Tran, Andrews, Ayan, Bhosale, Edunov, Fan, Gao, Goswami, Guzm{\'a}n, Koehn, Mourachko, Ropers, Saleem, Schwenk, and Wang}]{nllb2022}
 {NLLB Team}, Marta~R. Costa-juss{\`a}, James Cross, Onur {\c{C}}elebi, Maha Elbayad, Kenneth Heafield, Kevin Heffernan, Elahe Kalbassi, Janice Lam, Daniel Licht, Jean Maillard, Anna Sun, Skyler Wang, Guillaume Wenzek, Al~Youngblood, Bapi Akula, Loic Barrault, Gabriel Mejia-Gonzalez, Prangthip Hansanti, and 20 others. 2022.
 \newblock No language left behind: Scaling human-centered machine translation.
 \newblock \emph{arXiv preprint arXiv:2207.04672}.
+
+\bibitem[{{OpenAI}(2023)}]{whisper-large-v3}
+{OpenAI}. 2023.
+\newblock Whisper large v3.
+\newblock \url{https://huggingface.co/openai/whisper-large-v3}.
+\newblock License: Apache-2.0.
 
 \bibitem[{Papineni et~al.(2002)Papineni, Roukos, Ward, and Zhu}]{papineni2002bleu}
 Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002.
@@ -25,6 +44,11 @@ Maja Popovi{\'c}. 2015.
 Alec Radford, Jong~Wook Kim, Tao Xu, Greg Brockman, Christine McLeavey, and Ilya Sutskever. 2023.
 \newblock Robust speech recognition via large-scale weak supervision.
 \newblock \emph{arXiv preprint arXiv:2212.04356}.
+
+\bibitem[{Rei et~al.(2020)Rei, Stewart, Farinha, and Lavie}]{rei2020comet}
+Ricardo Rei, Craig Stewart, Ana~C Farinha, and Alon Lavie. 2020.
+\newblock {COMET}: A neural framework for {MT} evaluation.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)}, pages 2685--2702.
 
 \bibitem[{Uppaal et~al.(2026)}]{iwslt2026dataset}
 Shashwat Uppaal and 1 others. 2026.

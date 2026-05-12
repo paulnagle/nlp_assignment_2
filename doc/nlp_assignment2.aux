@@ -12,8 +12,9 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Problem Statement}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Dataset}{1}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Dataset Composition}{1}{subsection.2.1}\protected@file@percent }
-\citation{radford2023whisper}
-\citation{nllb2022}
+\citation{radford2023whisper,whisper-large-v3}
+\citation{nllb2022,nllb-distilled}
+\citation{whisper-small-irish}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Audio Characteristics}{2}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Annotation Format}{2}{subsection.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Preprocessing}{2}{subsection.2.4}\protected@file@percent }
@@ -21,32 +22,37 @@
 \@writefile{toc}{\contentsline {section}{\numberline {3}Pipeline Architectures}{2}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Baseline System: Whisper-Large + NLLB}{2}{subsection.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Improved System 1: Specialized Whisper + NLLB}{2}{subsection.3.2}\protected@file@percent }
-\citation{Gusfield:97}
-\citation{Gusfield:97}
-\bibdata{custom}
-\bibcite{Gusfield:97}{{1}{1997}{{Gusfield}}{{}}}
-\bibcite{nllb2022}{{2}{2022}{{{NLLB Team} et~al.}}{{{NLLB Team}, Costa-juss{\`a}, Cross, {\c {C}}elebi, Elbayad, Heafield, Heffernan, Kalbassi, Lam, Licht, Maillard, Sun, Wang, Wenzek, Youngblood, Akula, Barrault, Mejia-Gonzalez, Hansanti, Hoffman, Jarrett, Sadagopan, Rowe, Spruit, Tran, Andrews, Ayan, Bhosale, Edunov, Fan, Gao, Goswami, Guzm{\'a}n, Koehn, Mourachko, Ropers, Saleem, Schwenk, and Wang}}}
-\bibcite{papineni2002bleu}{{3}{2002}{{Papineni et~al.}}{{Papineni, Roukos, Ward, and Zhu}}}
-\bibcite{popovic2015chrf}{{4}{2015}{{Popovi{\'c}}}{{}}}
-\bibcite{radford2023whisper}{{5}{2023}{{Radford et~al.}}{{Radford, Kim, Xu, Brockman, McLeavey, and Sutskever}}}
+\citation{opus-mt-ga-en}
+\citation{papineni2002bleu}
+\citation{popovic2015chrf}
+\citation{rei2020comet}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Improved System 2: Whisper-Large + OPUS-MT}{3}{subsection.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Improved System 3: Specialized Whisper + OPUS-MT}{3}{subsection.3.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Implementation Details}{3}{subsection.3.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiment}{3}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Evaluation Setup}{3}{subsection.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Metrics}{3}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Experimental Conditions}{3}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Citations}{3}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}BLEU/chrF++ Scores}{3}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Qualitative Analysis}{3}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Result Interpretations}{3}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{3}{section.8}\protected@file@percent }
-\bibcite{iwslt2026dataset}{{6}{2026}{{Uppaal et~al.}}{{}}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Overall Comparison Table}}{4}{table.caption.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Experimental Conditions}{4}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}BLEU/chrF++/COMET Scores}{4}{section.5}\protected@file@percent }
+\bibdata{custom}
+\bibcite{opus-mt-ga-en}{{1}{2020}{{Helsinki-NLP}}{{}}}
+\bibcite{whisper-small-irish}{{2}{2023}{{InoWouw}}{{}}}
+\bibcite{nllb-distilled}{{3}{2022}{{Meta AI}}{{}}}
+\bibcite{nllb2022}{{4}{2022}{{{NLLB Team} et~al.}}{{{NLLB Team}, Costa-juss{\`a}, Cross, {\c {C}}elebi, Elbayad, Heafield, Heffernan, Kalbassi, Lam, Licht, Maillard, Sun, Wang, Wenzek, Youngblood, Akula, Barrault, Mejia-Gonzalez, Hansanti, Hoffman, Jarrett, Sadagopan, Rowe, Spruit, Tran, Andrews, Ayan, Bhosale, Edunov, Fan, Gao, Goswami, Guzm{\'a}n, Koehn, Mourachko, Ropers, Saleem, Schwenk, and Wang}}}
+\bibcite{whisper-large-v3}{{5}{2023}{{OpenAI}}{{}}}
+\bibcite{papineni2002bleu}{{6}{2002}{{Papineni et~al.}}{{Papineni, Roukos, Ward, and Zhu}}}
+\bibcite{popovic2015chrf}{{7}{2015}{{Popovi{\'c}}}{{}}}
+\bibcite{radford2023whisper}{{8}{2023}{{Radford et~al.}}{{Radford, Kim, Xu, Brockman, McLeavey, and Sutskever}}}
+\bibcite{rei2020comet}{{9}{2020}{{Rei et~al.}}{{Rei, Stewart, Farinha, and Lavie}}}
+\bibcite{iwslt2026dataset}{{10}{2026}{{Uppaal et~al.}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Qualitative Analysis}{5}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Result Interpretations}{5}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{5}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}AI Use Declaration}{5}{appendix.A}\protected@file@percent }
+\newlabel{sec:appendix}{{A}{5}{AI Use Declaration}{appendix.A}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Overall Comparison Table}}{6}{table.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:system-comparison}{{1}{4}{Overall Comparison Table}{table.caption.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Comparison vs Baseline ASR + NLLB}}{4}{table.caption.2}\protected@file@percent }
-\newlabel{tab:relative-comparison}{{2}{4}{Relative Comparison vs Baseline ASR + NLLB}{table.caption.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}AI Use Declaration}{4}{appendix.A}\protected@file@percent }
-\newlabel{sec:appendix}{{A}{4}{AI Use Declaration}{appendix.A}{}}
-\gdef \@abspage@last{4}
+\newlabel{tab:system-comparison}{{1}{6}{Overall Comparison Table}{table.caption.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Comparison vs Baseline ASR + NLLB}}{6}{table.caption.2}\protected@file@percent }
+\newlabel{tab:relative-comparison}{{2}{6}{Relative Comparison vs Baseline ASR + NLLB}{table.caption.2}{}}
+\gdef \@abspage@last{6}
