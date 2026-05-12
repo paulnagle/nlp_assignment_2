@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex nlp_assignment2"] 1778583199.69537 "nlp_assignment2.aux" "nlp_assignment2.bbl" "nlp_assignment2" 1778583200.79697 0
+["bibtex nlp_assignment2"] 1778583349.92975 "nlp_assignment2.aux" "nlp_assignment2.bbl" "nlp_assignment2" 1778583486.81276 0
   "./acl_natbib.bst" 1778565805.17108 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
   "./custom.bib" 1778581005.93326 5277 9859f4b226a94501ec918504331976d5 ""
-  "nlp_assignment2.aux" 1778583200.48438 5364 5c33eafef353996984c65cb32e6d87b4 "pdflatex"
+  "nlp_assignment2.aux" 1778583486.51988 5364 a663b2959486b80c65180556edb69c62 "pdflatex"
   (generated)
   "nlp_assignment2.bbl"
   "nlp_assignment2.blg"
   (rewritten before read)
-["pdflatex"] 1778583199.83458 "/Users/paulnagle/github/nlp_assignment_2/doc/nlp_assignment2.tex" "nlp_assignment2.pdf" "nlp_assignment2" 1778583200.79719 0
-  "/Users/paulnagle/github/nlp_assignment_2/doc/nlp_assignment2.tex" 1778583198.45187 27991 145d3f2f3a3d0e066675f01a7a5066b9 ""
+["pdflatex"] 1778583485.80792 "/Users/paulnagle/github/nlp_assignment_2/doc/nlp_assignment2.tex" "nlp_assignment2.pdf" "nlp_assignment2" 1778583486.81301 0
+  "/Users/paulnagle/github/nlp_assignment_2/doc/nlp_assignment2.tex" 1778583485.61159 29786 660fbdf73f8153fd9538d18d95c2e3d7 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1558214095 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
@@ -124,10 +124,10 @@
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1778566677 3636772 43bf91e38bada5d60cc7028fc5bc2122 ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
   "acl.sty" 1778565805.1744 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "nlp_assignment2.aux" 1778583200.48438 5364 5c33eafef353996984c65cb32e6d87b4 "pdflatex"
-  "nlp_assignment2.bbl" 1778583199.83171 3255 6d21cc39b6cbdde288f3ce35e014bc0c "bibtex nlp_assignment2"
-  "nlp_assignment2.out" 1778583200.48514 4200 b3848842da37ecef490d598aa9b56e07 "pdflatex"
-  "nlp_assignment2.tex" 1778583198.45187 27991 145d3f2f3a3d0e066675f01a7a5066b9 ""
+  "nlp_assignment2.aux" 1778583486.51988 5364 a663b2959486b80c65180556edb69c62 "pdflatex"
+  "nlp_assignment2.bbl" 1778583350.07572 3255 6d21cc39b6cbdde288f3ce35e014bc0c "bibtex nlp_assignment2"
+  "nlp_assignment2.out" 1778583486.52063 4200 b3848842da37ecef490d598aa9b56e07 "pdflatex"
+  "nlp_assignment2.tex" 1778583485.61159 29786 660fbdf73f8153fd9538d18d95c2e3d7 ""
   (generated)
   "nlp_assignment2.aux"
   "nlp_assignment2.log"
