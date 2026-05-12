@@ -97,7 +97,55 @@ systems.
 
 \section{Pipeline Architectures}
 
-Baseline and improved pipeline architectures with justifications.
+We implement four cascaded speech translation systems combining different ASR and MT components. All systems follow a two-stage architecture: audio → Irish transcription (ASR) → English translation (MT).
+
+\subsection{Baseline System: Whisper-Large + NLLB}
+
+Our baseline combines OpenAI's Whisper-large-v3 \citep{radford2023whisper} for ASR with Meta's NLLB-200-distilled-600M \citep{nllb2022} for MT. Whisper-large-v3 (1.5B parameters) is a multilingual ASR model trained on 680,000 hours of audio across 99 languages including Irish. We use the model without language-specific fine-tuning, relying on its general multilingual capabilities.
+
+For translation, NLLB-200 (600M parameters) supports 200 languages including Irish (\texttt{gle\_Latn}) and English (\texttt{eng\_Latn}). We configure the model with forced BOS token for target language specification and beam search (num\_beams=5) for improved output quality.
+
+\textbf{Pipeline flow:} Audio (16kHz WAV) → Whisper processor (mel-spectrogram extraction, 80 mel bins) → Whisper encoder-decoder → Irish transcript → NLLB tokenizer → NLLB encoder-decoder → English translation.
+
+\textbf{Justification:} This baseline represents a strong starting point using state-of-the-art multilingual models with proven performance across diverse languages. Both models are readily available via HuggingFace and require no additional training.
+
+\subsection{Improved System 1: Specialized Whisper + NLLB}
+
+The first improvement replaces the general Whisper model with InoWouw/whisper-small-irish, a Whisper-small variant (244M parameters) fine-tuned specifically on Irish speech data. This model addresses the baseline's tendency to misidentify Irish as Welsh or English due to phonological similarities.
+
+\textbf{Key modifications:}
+\begin{itemize}
+\item Irish-specific acoustic modeling trained on native speaker data
+\item Reduced model size (244M vs 1.5B parameters) with specialized performance
+\item Same mel-spectrogram preprocessing (80 bins, 16kHz) for compatibility
+\item Identical NLLB-200 MT component as baseline
+\end{itemize}
+
+\textbf{Justification:} Language-specific fine-tuning should improve ASR accuracy for Irish phonological features (lenition, eclipsis, broad/slender consonants), reducing error propagation to the MT stage. The smaller model size also improves inference speed.
+
+\subsection{Improved System 2: Whisper-Large + OPUS-MT}
+
+This variant maintains the baseline Whisper-large-v3 ASR but replaces NLLB with Helsinki-NLP's opus-mt-ga-en, a bilingual Irish-English translation model from the OPUS-MT family. Unlike NLLB's multilingual approach, OPUS-MT is trained exclusively on Irish-English parallel data.
+
+\textbf{Key modifications:}
+\begin{itemize}
+\item Bilingual translation model (smaller, ~300M parameters)
+\item Direct Irish→English optimization without multilingual interference
+\item Simpler tokenization without language-specific BOS tokens
+\item Same beam search configuration (num\_beams=5)
+\end{itemize}
+
+\textbf{Justification:} Bilingual models often outperform multilingual models on specific language pairs due to focused training. OPUS-MT may better handle Irish-specific translation challenges like VSO word order and prepositional pronouns.
+
+\subsection{Improved System 3: Specialized Whisper + OPUS-MT}
+
+Our best-performing system combines both improvements: Irish-specific ASR (InoWouw/whisper-small-irish) with bilingual MT (opus-mt-ga-en). This architecture optimizes both pipeline stages for the Irish-English language pair.
+
+\textbf{Justification:} Combining specialized ASR and focused MT should provide synergistic improvements. Better Irish transcriptions from the specialized ASR reduce MT errors, while the bilingual MT model better handles the improved Irish input. This represents the most language-pair-specific configuration tested.
+
+\subsection{Implementation Details}
+
+All systems share common preprocessing: audio resampling to 16kHz mono using librosa, Whisper feature extraction with 80 mel-frequency bins, and beam search decoding. We process the complete IWSLT 2026 development set (1120 samples) for each system. Models run on GPU (CUDA) with float32 precision to ensure numerical stability. No audio augmentation or text post-processing is applied to maintain fair comparison across systems.
 
 \section{Experiment}
 
