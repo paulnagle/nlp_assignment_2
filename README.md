@@ -23,3 +23,7 @@ git submodule update --init --recursive
 ## Requirements
 
 Training data is stored in submodules and must be cloned recursively.
+
+## Runtime reaults
+
+The runtime execution of the notebook can be viewed at https://colab.research.google.com/drive/1YQPvNt7zn2YQBCGtewzAi7ro3Kz6nVpi
